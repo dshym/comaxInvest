@@ -6,10 +6,10 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import Gradient from '../components/Gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as Linking from 'expo-linking';
 import database from '@react-native-firebase/database';
-import vars from '../evn';
+import vars from '../env';
 
 const ContactsScreen = props => {
     const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +66,6 @@ const ContactsScreen = props => {
             {isLoading ? <ActivityIndicator size="large" color={Colors.primary} style={styles.centered}/> 
                 :
                 <View style={styles.container}>
-                    <View>
                     <TouchableWithoutFeedback onPress={showLocation}>
                         <View style={styles.contactContainer}> 
                         <Ionicons name="md-map" size={30} color="black" />
@@ -91,7 +90,6 @@ const ContactsScreen = props => {
                         <Text style={styles.title}>Comax Invest Webpage</Text>
                         </View>
                     </TouchableWithoutFeedback>
-                    </View>
                 </View>
             }
         </Gradient>
@@ -129,12 +127,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
-        margin: 10
+        padding: 10
     },
     contactContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 8
+        padding: 10
     },
     title: {
         fontSize: 16,

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, ActivityIndicator, Alert, Share } from 'react-native';
+import { StyleSheet, Alert, Share } from 'react-native';
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import PdfViewer from '../components/PdfViewer';
-
 import storage from '@react-native-firebase/storage';
 import * as DocumentPicker from 'expo-document-picker';
-import vars from '../evn';
+import vars from '../env';
 import { useSelector } from 'react-redux';
 
 const ExclusiveOfferScreen = props => {
@@ -21,8 +20,8 @@ const ExclusiveOfferScreen = props => {
     const reference = storage().ref("/Exclusive offer");
     
     const getUrl = async (link) => {
-        const url = await storage().ref(`${link}`).getDownloadURL();
-        setUrl(url);
+            const url = await storage().ref(`${link}`).getDownloadURL();
+            setUrl(url);
     }
     
     const getPdf = () => {
@@ -53,8 +52,9 @@ const ExclusiveOfferScreen = props => {
         }
     }
 
-    const uploadFile = async () => {
-        const pdfFile = await DocumentPicker.getDocumentAsync();
+
+    const changeFile = async () => {
+        const pdfFile = await DocumentPicker.getDocumentAsync('pdf/*');
         const path  = pdfFile.uri;
         const uploadReference = storage().ref(`Exclusive offer/${pdfFile.name}`);
         try {
@@ -69,14 +69,8 @@ const ExclusiveOfferScreen = props => {
         } catch (error) {
             return;
         }
+        deleteFile();
     }
-
-    const changeFile = () => {
-       uploadFile();
-       deleteFile();
-    }
-    
-
     
 
     const onShare = async () => {

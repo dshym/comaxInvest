@@ -1,12 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { Card } from 'react-native-elements';
 import Colors from '../constants/Colors';
+import { LineChart } from 'react-native-chart-kit';
 
 const SignalItem = props => {
+    const [chartVisible, setChartVisible] = useState(false);
+    const [chartData, setchartData] = useState([]);
+    const allSignals = props.allSignals;
+    const screenWidth = Dimensions.get("window").width * 0.9;
+    useEffect(() => {
+        const retriveData = () => {
+            let data = [];
+            allSignals.forEach(element => {
+                if(element.signal.strategy === props.strategy) {
+                    data.push(element.signal.price);
+                }
+            });
+            setchartData(data);
+        }
+        retriveData();
+    }, []);
+    
+    const data = {
+        datasets: [
+          {
+            data: chartData,
+            color:  () => `rgba(0, 178, 118, 1)`,
+            strokeWidth: 2 // optional
+          }
+        ],
+        legend: [`Dynamic of ${props.strategy} price`]
+    };
+    const chartConfig = {
+        backgroundGradientFrom: "#fff",
+        backgroundGradientTo: "#fff",
+        color: (opacity = 1) => `rgba(0, 178, 118, ${opacity})`,
+        decimalPlaces: 3,
+        propsForVerticalLabels: {fontSize: 10}
+    };
     
     return (
-        <View style={styles.signal}>
+        <View>
+            {chartVisible ? (
+                <TouchableOpacity 
+                    activeOpacity={0.4} 
+                    onPress={()=>setChartVisible(!chartVisible)}
+                    style={{flex: 1, alignItems: 'center', marginVertical: 20}}
+                >
+                    <LineChart
+                        data={data}
+                        width={screenWidth}
+                        height={200}
+                        chartConfig={chartConfig}
+                        verticalLabelRotation={15}
+                        style={{
+                            borderRadius: 10
+                        }}
+                    />
+                </TouchableOpacity>
+            ) : 
+            (
+        <Card containerStyle={styles.signal}>
+            <TouchableOpacity activeOpacity={0.4} onPress={()=>setChartVisible(!chartVisible)}>
+                
+            <View>
             <View style={styles.titleContainer}> 
                 <Text style={styles.title}>
                     <Text style={styles.titleName}>Timestamp:</Text>
@@ -94,18 +152,20 @@ const SignalItem = props => {
                 </View>
             </View>)
             } 
+            </View>
+            
+            
+            </TouchableOpacity>           
+        </Card>
+            )}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     signal: {
-        elevation: 5,
         borderRadius: 10,
-        backgroundColor: 'white',
-        height: 300,
-        margin: 10,
-        padding: 10
+        marginVertical: 20
     },
     title: {    
         fontSize: 15

@@ -1,16 +1,16 @@
-// export const SIGNUP = 'SIGNUP';
-// export const LOGIN = 'LOGIN';
+import database from '@react-native-firebase/database';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 
-const authenticate = (userId, token) => {
+export const authenticate = (userId, token) => {
     return disptach => {
       disptach({ type: AUTHENTICATE, userId: userId, token: token});
     };
-  };
+};
 
-export const signup = (email, password) => {
+export const signup = (name, tel, email, password) => {
     return async dispatch => {
         const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD3R8jyTq4Z_U7OxJjZdaT7MOH2Mv5Huqg',
             {
@@ -37,8 +37,20 @@ export const signup = (email, password) => {
         }
 
         const resData = await response.json();
-        //console.log(resData);
+
+        try {
+            database().ref(`/users/${resData.localId}`).set({
+                name: name,
+                phoneNumber: tel,
+                email: resData.email,
+            });
+        } catch (error) {
+            throw new Error(error);
+        }
+        
         dispatch(authenticate(resData.localId, resData.idToken));
+        const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
+        saveDataToStorage(resData.idToken, resData.localId, expirationDate);
     };
 };
 
@@ -71,11 +83,22 @@ export const login = (email, password) => {
         }
 
         const resData = await response.json();
-        //console.log(resData);
         dispatch(authenticate(resData.localId, resData.idToken));
+        const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000);
+        saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+        
     };
 };
 
 export const logout = () => {
+    AsyncStorage.removeItem('userData');
     return { type: LOGOUT };
 };  
+
+const saveDataToStorage = async (token, userId, expirationDate) => {
+    await AsyncStorage.setItem('userData', JSON.stringify({
+      token: token,
+      userId: userId,
+      expiryDate: expirationDate.toISOString()
+    }));
+  }

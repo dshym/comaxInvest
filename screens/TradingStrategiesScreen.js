@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, ActionSheetIOS } from 'react-native';
+import { Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import Colors from '../constants/Colors';
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -7,10 +7,9 @@ import HeaderButton from '../components/HeaderButton';
 import Gradient from '../components/Gradient';
 import PdfItem from '../components/PdfItem';
 import pdf from '../models/pdf';
-import vars from '../evn';
+import vars from '../env';
 import { useSelector } from 'react-redux';
 import storage from '@react-native-firebase/storage';
-
 
 const TradingStrategiesScreen = props => {
     const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +52,7 @@ const TradingStrategiesScreen = props => {
                 onRefresh={getPdfList}
                 refreshing={isRefreshing}
                 data={pdfPathList}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.title}
                 renderItem={itemData => 
                    <PdfItem 
                         title={itemData.item.title}

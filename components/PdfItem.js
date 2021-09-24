@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableNativeFeedback, Pressable, Alert, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -8,16 +8,14 @@ const PdfItem = props => {
     
     return (
         <View style={styles.container}>  
-            <View style={{overflow: 'hidden', borderRadius: 10}}>
-                <TouchableNativeFeedback onPress={props.onSelect}>
-                    <View style={styles.description}>
-                        <View style={styles.descriptionContainer}>
-                        <Ionicons name="md-document" size={30} color="red"/>
-                        <Text style={styles.title} numberOfLines={1}>{props.title}</Text>
-                        </View>
-                    </View>
-                </TouchableNativeFeedback>
-            </View> 
+        <TouchableOpacity onPress={props.onSelect} activeOpacity={0.4}>
+            <View style={styles.description}>
+                <View style={styles.descriptionContainer}>
+                <Ionicons name="md-document" size={30} color="red"/>
+                <Text style={styles.title} numberOfLines={1}>{props.title}</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
         </View>
     );
 }

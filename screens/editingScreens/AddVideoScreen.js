@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback, useReducer } from 'react';
 import { 
     View, 
-    Text, 
-    StyleSheet, 
-    TextInput, 
+    StyleSheet,
     ScrollView, 
     KeyboardAvoidingView, 
     TouchableNativeFeedback,
@@ -17,7 +15,7 @@ import Gradient from '../../components/Gradient';
 import Input from '../../components/Input'; 
 import Colors from '../../constants/Colors';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as videoAction from '../../store/actions/video';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';

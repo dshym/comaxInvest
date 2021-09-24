@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, View, Text, Alert, Share} from 'react-native';
+import { StyleSheet, Dimensions, View, Alert, Share} from 'react-native';
 import { useSelector } from 'react-redux';
 import storage from '@react-native-firebase/storage';
 import Pdf from 'react-native-pdf';
 import Colors from '../constants/Colors';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
-import vars from '../evn';
+import vars from '../env';
 
 const PdfViewerScreen = props => {
     const [url, setUrl] = useState();

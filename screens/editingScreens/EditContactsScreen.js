@@ -131,7 +131,7 @@ const EditContactsScreen = props => {
                     <View style={styles.buttonContainer}>
                         {isLoading ? (<ActivityIndicator size="small" color={Colors.primary}/>) 
                         : 
-                        (<Button title="Submit" onPress={pushData} color={Colors.primary}/>)
+                        (<Button title="Submit" onPress={inputHandler} color={Colors.primary}/>)
                         }
                     </View>
                     </ScrollView>

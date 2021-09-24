@@ -5,9 +5,7 @@ import {
     StyleSheet, 
     Button, 
     FlatList, 
-    ActivityIndicator,
-    SafeAreaView,
-    Alert
+    ActivityIndicator
 } from 'react-native';
 import Colors from '../constants/Colors';
 
@@ -16,17 +14,17 @@ import HeaderButton from '../components/HeaderButton';
 import Gradient from '../components/Gradient';
 import * as Linking from 'expo-linking';
 import VideoItem from '../components/VideoItem';
-
 import { useSelector, useDispatch } from 'react-redux';
 import * as videoActions from '../store/actions/video';
-import vars from '../evn';
+import vars from '../env';
 
 const VideoScreen = props => {
-    
     const [isLoading, setIsLoading] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState();
     const videos = useSelector(state => state.videos.videos);
+    const videoList = videos.reverse();
+
     const dispatch = useDispatch();
     const loadVideos = useCallback(async () => {
         setError(null);
@@ -63,14 +61,14 @@ const VideoScreen = props => {
 
     if (error) {
         return (
-          <View style={styles.centered}>
-            <Text>An error occurred!</Text>
+          <Gradient style={styles.centered}>
+            <Text style={{marginBottom: 5}}>{error}</Text>
             <Button
               title="Try again"
               onPress={loadVideos}
               color={Colors.primary}
             />
-          </View>
+          </Gradient>
         );
     }
 
@@ -83,28 +81,13 @@ const VideoScreen = props => {
             </Gradient>
         );
     }
-
-    const deleteHandler = (id) => {
-        Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
-          { text: 'No', style: 'default' },
-          {
-            text: 'Yes',
-            style: 'destructive',
-            onPress: () => {
-              dispatch(videoActions.deleteVideo(id));
-            }
-          }
-        ]);
-      };
       
     return (
         <Gradient>
-           
             <FlatList 
-                
                 onRefresh={loadVideos}
                 refreshing={isRefreshing}
-                data={videos}
+                data={videoList}
                 keyExtractor={item => item.id}
                 renderItem={itemData => 
                     <VideoItem
@@ -116,15 +99,14 @@ const VideoScreen = props => {
                         videoId={itemData.item.id}
                     />
                 }
-            />    
-      
+            />
         </Gradient>
     );
 }
 
 VideoScreen.navigationOptions = navData => {
     const userId = navData.navigation.getParam('userId');
-    let enableAdding = false; //for test mode "true" (default false)
+    let enableAdding = false;
     if(userId === vars.admin) {
         enableAdding = true;
     }

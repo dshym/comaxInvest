@@ -1,4 +1,4 @@
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import React from 'react';
@@ -6,7 +6,6 @@ import { View, SafeAreaView, ScrollView, Image, StyleSheet } from 'react-native'
 
 import Colors from '../constants/Colors';
 import AnaliticsScreen from '../screens/AnaliticsScreen';
-import AuthenticationScreen from '../screens/AuthenticationScreen';
 import BankingSignalsScreen from '../screens/BankingSignalsScreen';
 import ContactsScreen from '../screens/ContactsScreen';
 import ExclusiveOfferScreen from '../screens/ExclusiveOfferScreen';
@@ -19,6 +18,10 @@ import ComaxInvestSignalsScreen from '../screens/ComaxInvestSignalsScreen';
 import PdfViewerScreen from '../screens/PdfViewerScreen';
 import AddPdfScreen from '../screens/editingScreens/AddPdfScreen';
 import EditContactsScreen from '../screens/editingScreens/EditContactsScreen';
+import EditProfileScreen from '../screens/editingScreens/EditProfileScreen';
+import StartupScreen from '../screens/StartupScreen';
+import JustDoItScreen from '../screens/JustDoItScreen';
+import WebViewScreen from '../screens/WebViewScreen';
 
 const defaultNavOptions = {
     headerStyle: {
@@ -27,21 +30,9 @@ const defaultNavOptions = {
     headerTintColot: Colors.accent
 }
 
-const ProfileNavigator = createStackNavigator({
-    Profile: ProfileScreen
-});
-
-// const AnaliticsNavigator = createStackNavigator({
-//     Analitics: AnaliticsScreen,
-//     ComaxInvestSignals: ComaxInvestSignalsScreen
-// });
-
 const SignalsNavigator = createStackNavigator({
     Signals: {
-        screen: SignalsScreen,
-        navigationOptions: {
-            headerTitle: 'Main'
-        }
+        screen: SignalsScreen
     },
     BankingSignals: {
         screen: BankingSignalsScreen,
@@ -61,8 +52,9 @@ const SignalsNavigator = createStackNavigator({
             headerTitle: 'Comax Invest Signals'
         }
     },
-    Authentication: AuthenticationScreen,
-    Profile: ProfileScreen
+    WebView: WebViewScreen,
+    Profile: ProfileScreen,
+    EditProfile: EditProfileScreen
 }, {
     defaultNavigationOptions: defaultNavOptions
 });
@@ -97,7 +89,13 @@ const ContactsNavigator = createStackNavigator({
     defaultNavigationOptions: defaultNavOptions
 });
 
-const MainNavigator = createDrawerNavigator({
+const JustDoItNavigator = createStackNavigator({
+    JustDoIt: JustDoItScreen 
+}, {
+    defaultNavigationOptions: defaultNavOptions
+});
+
+const DrawerNavigator = createDrawerNavigator({
     Signals: {
         screen: SignalsNavigator,
         navigationOptions: {
@@ -115,14 +113,18 @@ const MainNavigator = createDrawerNavigator({
         screen: ExclusiveOfferNavigator,
         navigationOptions: {
             drawerLabel: 'Exclusive offer',
-            
         }
     },
     Contacts: ContactsNavigator,
-
+    JustDoIt: {
+        screen: JustDoItNavigator,
+        navigationOptions: {
+            drawerLabel: 'Just do it',
+        }
+    }
 }, {
     contentOptions: {
-        activeTintColor: Colors.accent,
+        activeTintColor: 'black',
         activeBackgroundColor: Colors.primary,
         labelStyle: {
             fontSize: 18
@@ -131,7 +133,7 @@ const MainNavigator = createDrawerNavigator({
             fontSize: 20
         }
     },
-    drawerBackgroundColor: '#ccc',
+    drawerBackgroundColor: 'white',
     contentComponent: (props) => (
         <SafeAreaView style={{flex: 1}}>
             <View style={styles.imageContainer}>
@@ -144,12 +146,17 @@ const MainNavigator = createDrawerNavigator({
     )
 });
 
+const MainNavigator = createSwitchNavigator({
+    Startup: StartupScreen,
+    Main: DrawerNavigator
+});
+
 const styles = StyleSheet.create({
     imageContainer: {
         height: 100,
         alignItems: 'center', 
         justifyContent: 'center', 
-        paddingTop: 40, 
+        paddingTop: 30, 
         paddingHorizontal: 10
     },
     image: {

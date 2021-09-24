@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Gradient from '../components/Gradient';
 
-import SignalGroupItem from '../components/SignalGroupItem';
+import AnaliticsGroupItem from '../components/AnaliticsGroupItem';
 
 const AnaliticsScreen = props => {
     return (
         <Gradient style={styles.screen}>
-            <SignalGroupItem
+            <AnaliticsGroupItem
                 title="Comax Invest Signals"
                 onSelect={() => {props.navigation.navigate('ComaxInvestSignals')}}
             />
